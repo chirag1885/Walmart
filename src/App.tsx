@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-
 // Eagerly import all pages and components
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
