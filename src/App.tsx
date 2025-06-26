@@ -16,6 +16,7 @@ import StoreMap from './pages/StoreMap';
 import InventoryManagement from './pages/InventoryManagement';
 import Analytics from './pages/Analytics';
 import OrderHistory from './pages/OrderHistory';
+import Feedback from './pages/Feedback';
 import AIChat from './components/AIChat';
 
 // Layout wrapper (optional)
@@ -47,6 +48,7 @@ function App() {
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/order-history" element={<OrderHistory />} />
+        <Route path="/feedback" element={<Feedback />} />
       </Routes>
     </>
   );
