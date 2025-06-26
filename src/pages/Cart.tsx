@@ -145,21 +145,6 @@ const Cart = () => {
                         </button>
                       </div>
                       <div className="flex items-center justify-between mt-4">
-                        {/* <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors"
-                          >
-                            <Minus className="h-4 w-4" />
-                          </button>
-                          <span className="text-lg font-medium text-gray-800 w-8 text-center">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition-colors"
-                          >
-                            <Plus className="h-4 w-4" />
-                          </button>
-                        </div> */}
                         <span className="text-lg font-bold text-gray-800">
                           ${(item.price * item.quantity).toFixed(2)}
                         </span>
