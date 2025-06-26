@@ -31,7 +31,7 @@ const Feedback = () => {
   };
 
   const handleGoBack = () => {
-    navigate('/');
+    navigate('/customer');
   };
 
   const handleNewFeedback = () => {
