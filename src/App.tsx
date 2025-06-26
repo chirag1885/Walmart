@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+
 // Eagerly import all pages and components
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
@@ -10,11 +11,11 @@ import ProductCatalog from './pages/ProductCatalog';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Payment from './pages/Payment';
-import BarcodeScanner from './pages/BarcodeScanner';
 import EnhancedBarcodeScanner from './pages/EnhancedBarcodeScanner';
 import StoreMap from './pages/StoreMap';
 import InventoryManagement from './pages/InventoryManagement';
 import Analytics from './pages/Analytics';
+import OrderHistory from './pages/OrderHistory';
 import AIChat from './components/AIChat';
 
 // Layout wrapper (optional)
@@ -41,11 +42,11 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/scanner" element={<BarcodeScanner />} />
         <Route path="/enhanced-scanner" element={<EnhancedBarcodeScanner />} />
         <Route path="/store-map" element={<StoreMap />} />
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/order-history" element={<OrderHistory />} />
       </Routes>
     </>
   );

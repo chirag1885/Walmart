@@ -1,20 +1,94 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Scan, MapPin, Leaf, CreditCard, Receipt, User, Bell, Search, Grid, List, LogOut } from 'lucide-react';
+import NotificationPanel from '../components/NotificationPanel';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [cartItems] = useState(3);
   const [notifications] = useState(2);
   const [viewMode, setViewMode] = useState('grid');
-
   const cartNumber = localStorage.getItem('cartNumber') || 'CART-001';
-
   const handleLogout = () => {
     localStorage.removeItem('userType');
     localStorage.removeItem('cartNumber');
     navigate('/login');
   };
+  const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  
+  // Sample notifications data
+  const [notificationsData, setNotificationsData] = useState([
+    {
+      id: 1,
+      type: 'offer',
+      title: 'Weekend Special',
+      message: 'Get 20% off on all organic fruits this weekend!',
+      time: '2 hours ago',
+      read: false,
+      link: '/catalog?filter=organic',
+      discount: '20%'
+    },
+    {
+      id: 2,
+      type: 'info',
+      title: 'Store Hours Updated',
+      message: 'Our store will now be open until 10 PM on weekdays.',
+      time: '1 day ago',
+      read: true,
+      link: null
+    },
+    {
+      id: 3,
+      type: 'order',
+      title: 'Order #12345 Shipped',
+      message: 'Your recent order has been shipped and will arrive tomorrow.',
+      time: '2 days ago',
+      read: false,
+      link: '/order-history'
+    },
+    {
+      id: 4,
+      type: 'reminder',
+      title: 'Items in Cart',
+      message: 'You have items waiting in your cart. Complete your purchase now!',
+      time: '3 days ago',
+      read: false,
+      link: '/cart'
+    }
+  ]);
+  
+  // Toggle notification panel
+  const toggleNotificationPanel = () => {
+    setIsNotificationPanelOpen(!isNotificationPanelOpen);
+  };
+  
+  // Close notification panel
+  const closeNotificationPanel = () => {
+    setIsNotificationPanelOpen(false);
+  };
+  
+  // Mark notification as read
+  const handleMarkAsRead = (id) => {
+    setNotificationsData(prevNotifications =>
+      prevNotifications.map(notification =>
+        notification.id === id ? { ...notification, read: true } : notification
+      )
+    );
+  };
+  
+  // Mark all notifications as read
+  const handleMarkAllAsRead = () => {
+    setNotificationsData(prevNotifications =>
+      prevNotifications.map(notification => ({ ...notification, read: true }))
+    );
+  };
+  
+  // Clear all notifications
+  const handleClearAll = () => {
+    setNotificationsData([]);
+  };
+
+
 
   const recentPurchases = [
     { id: 1, name: 'Organic Bananas', price: '$4.99', date: '2 days ago', eco: true },
@@ -28,11 +102,21 @@ const CustomerDashboard = () => {
     { icon: MapPin, label: 'Store Map', path: '/store-map', color: 'from-purple-500 to-purple-600' },
     { icon: Leaf, label: 'Eco Products', path: '/catalog?filter=eco', color: 'from-green-500 to-green-600' },
     { icon: CreditCard, label: 'Payment', path: '/payment', color: 'from-indigo-500 to-indigo-600' },
-    { icon: Receipt, label: 'Receipts', path: '/receipts', color: 'from-orange-500 to-orange-600' },
+    { icon: Receipt, label: 'Order History', path: '/order-history', color: 'from-orange-500 to-orange-600' },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50">
+      {/* Notification Panel */}
+      <NotificationPanel
+        notifications={notificationsData}
+        isOpen={isNotificationPanelOpen}
+        onClose={closeNotificationPanel}
+        onMarkAsRead={handleMarkAsRead}
+        onMarkAllAsRead={handleMarkAllAsRead}
+        onClearAll={handleClearAll}
+      />
+      
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,11 +134,14 @@ const CustomerDashboard = () => {
               <span className="text-sm text-emerald-600 font-medium">Cart: {cartNumber}</span>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-gray-600 hover:text-gray-800 transition-colors">
+              <button 
+                className="relative p-2 text-gray-600 hover:text-gray-800 transition-colors"
+                onClick={toggleNotificationPanel}
+              >
                 <Bell className="h-5 w-5" />
-                {notifications > 0 && (
+                {notificationsData.filter(n => !n.read).length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {notifications}
+                    {notificationsData.filter(n => !n.read).length}
                   </span>
                 )}
               </button>

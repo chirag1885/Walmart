@@ -67,11 +67,16 @@ const EnhancedBarcodeScanner = () => {
     }, 2000);
   };
 
+  const [showNotification, setShowNotification] = useState(false);
+
   const handleConfirmAdd = () => {
     setShowConfirmation(false);
     // Simulate adding to cart
     setTimeout(() => {
-      navigate('/cart');
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 3000);
     }, 500);
   };
 
@@ -122,6 +127,18 @@ const EnhancedBarcodeScanner = () => {
       </header>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Cart notification */}
+        {showNotification && (
+          <div className=" top-6 center bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-emerald-100 flex items-center space-x-3 z-50 animate-fade-in">
+            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+              <CheckCircle className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-800">Item added to cart</p>
+              <p className="text-sm text-gray-600">{scannedProduct?.name} has been added</p>
+            </div>
+          </div>
+        )}
         {/* Directions Overlay */}
         {showDirections && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
