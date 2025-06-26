@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MessageSquare, MapPin, Clock, AlertTriangle, CheckCircle, User, Bot, Send } from 'lucide-react';
 
@@ -13,6 +13,7 @@ const EmployeeDashboard = () => {
     priority: string;
     timestamp: string;
     status: string;
+    type: string;
   };
 
   const [selectedQuery, setSelectedQuery] = useState<CustomerQuery | null>(null);
@@ -22,7 +23,7 @@ const EmployeeDashboard = () => {
     { type: 'bot', message: 'Hello! I\'m your AI assistant. How can I help you today?' }
   ]);
 
-  const customerQueries = [
+  const [customerQueries, setCustomerQueries] = useState([
     {
       id: 1,
       customer: 'Sarah Johnson',
@@ -31,7 +32,8 @@ const EmployeeDashboard = () => {
       location: 'Aisle 1 - Dairy Section',
       priority: 'high',
       timestamp: '2 minutes ago',
-      status: 'pending'
+      status: 'pending',
+      type: 'product'
     },
     {
       id: 2,
@@ -41,7 +43,8 @@ const EmployeeDashboard = () => {
       location: 'Aisle 3 - Produce',
       priority: 'medium',
       timestamp: '5 minutes ago',
-      status: 'pending'
+      status: 'pending',
+      type: 'technical'
     },
     {
       id: 3,
@@ -51,7 +54,8 @@ const EmployeeDashboard = () => {
       location: 'Aisle 2 - Bakery',
       priority: 'low',
       timestamp: '8 minutes ago',
-      status: 'resolved'
+      status: 'resolved',
+      type: 'technical'
     },
     {
       id: 4,
@@ -61,9 +65,39 @@ const EmployeeDashboard = () => {
       location: 'Checkout Lane 3',
       priority: 'high',
       timestamp: '12 minutes ago',
-      status: 'in-progress'
+      status: 'in-progress',
+      type: 'technical'
     }
-  ];
+  ]);
+  
+  // Check localStorage for any new customer queries
+  useEffect(() => {
+    const storedQueries = JSON.parse(localStorage.getItem('customerQueries') || '[]');
+    if (storedQueries.length > 0) {
+      // Map stored queries to match our format
+      const formattedQueries = storedQueries.map(query => {
+        return {
+          id: query.id,
+          customer: 'Customer',
+          cartNumber: query.cartNumber,
+          query: query.text,
+          location: query.location,
+          priority: query.type === 'technical' ? 'high' : (query.type === 'product' ? 'medium' : 'low'),
+          timestamp: 'Just now',
+          status: 'pending',
+          type: query.type
+        };
+      });
+      
+      // Merge with existing queries, avoiding duplicates by ID
+      const existingIds = new Set(customerQueries.map(q => q.id));
+      const newQueries = formattedQueries.filter(q => !existingIds.has(q.id));
+      
+      if (newQueries.length > 0) {
+        setCustomerQueries(prevQueries => [...newQueries, ...prevQueries]);
+      }
+    }
+  }, []);
 
   const handleSendMessage = () => {
     if (chatMessage.trim()) {
@@ -234,32 +268,79 @@ const EmployeeDashboard = () => {
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Query Details</h3>
                 <div className="space-y-4">
-                  <div>
+                  <div className="flex justify-between">
                     <label className="text-sm font-medium text-gray-600">Customer</label>
-                    <p className="text-gray-800 font-semibold">{selectedQuery.customer}</p>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedQuery.priority)}`}>
+                      {selectedQuery.priority} priority
+                    </span>
                   </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Cart Number</label>
-                    <p className="text-gray-800">{selectedQuery.cartNumber}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Issue</label>
-                    <p className="text-gray-800">{selectedQuery.query}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-gray-600">Location</label>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4 text-gray-400" />
-                      <p className="text-gray-800">{selectedQuery.location}</p>
+                  <p className="text-gray-800 font-semibold">{selectedQuery.customer}</p>
+                  
+                  <div className="flex justify-between">
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Cart Number</label>
+                      <p className="text-gray-800">{selectedQuery.cartNumber}</p>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-gray-600">Status</label>
+                      <p className={`font-medium ${getStatusColor(selectedQuery.status).replace('bg-', 'text-').replace('-100', '-700')}`}>
+                        {selectedQuery.status}
+                      </p>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <button className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300">
-                      Navigate to Customer
-                    </button>
-                    <button className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300">
-                      Mark Resolved
-                    </button>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Issue</label>
+                    <div className="mt-1 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                      <p className="text-gray-800">{selectedQuery.query}</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Location</label>
+                    <div className="flex items-center space-x-2 mt-1 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                      <MapPin className="h-5 w-5 text-blue-600" />
+                      <p className="text-blue-800 font-medium">{selectedQuery.location}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <label className="text-sm font-medium text-gray-600 mb-2 block">Take Action</label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={() => navigate('/store-map')}
+                        className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        <span>Navigate to Location</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          setCustomerQueries(prev => 
+                            prev.map(q => q.id === selectedQuery.id ? {...q, status: 'resolved'} : q)
+                          );
+                          setSelectedQuery(prev => prev ? {...prev, status: 'resolved'} : null);
+                        }}
+                        className="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-300"
+                      >
+                        <CheckCircle className="h-4 w-4" />
+                        <span>Mark Resolved</span>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="pt-2">
+                    <label className="text-sm font-medium text-gray-600 mb-2 block">Customer Response</label>
+                    <div className="flex space-x-2">
+                      <input 
+                        type="text" 
+                        placeholder="Send a message to customer..."
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <button className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        <Send className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< main
 import { ShoppingCart, Scan, MapPin, Leaf, MessageSquare, Receipt, User, Bell, Search, Grid, List, LogOut } from 'lucide-react';
+=======
+import { ShoppingCart, Scan, MapPin, MessageSquare, CreditCard, Receipt, User, Bell, Search, Grid, List, LogOut, Leaf } from 'lucide-react';
+>>>>>>> main
 import NotificationPanel from '../components/NotificationPanel';
-
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [cartItems] = useState(3);
@@ -100,8 +103,13 @@ const CustomerDashboard = () => {
     { icon: Scan, label: 'Enhanced Scanner', path: '/enhanced-scanner', color: 'from-emerald-500 to-emerald-600' },
     { icon: ShoppingCart, label: 'View Cart', path: '/cart', color: 'from-blue-500 to-blue-600', badge: cartItems },
     { icon: MapPin, label: 'Store Map', path: '/store-map', color: 'from-purple-500 to-purple-600' },
+<<<<<<< main
     { icon: Leaf, label: 'Eco Products', path: '/catalog?filter=eco', color: 'from-green-500 to-green-600' },
     { icon: MessageSquare, label: 'Feedback', path: '/feedback', color: 'from-indigo-500 to-indigo-600' },
+=======
+    { icon: MessageSquare, label: 'Raise Queries', path: '/raise-query', color: 'from-green-500 to-green-600' },
+    { icon: CreditCard, label: 'Payment', path: '/payment', color: 'from-indigo-500 to-indigo-600' },
+>>>>>>> main
     { icon: Receipt, label: 'Order History', path: '/order-history', color: 'from-orange-500 to-orange-600' },
   ];
 
