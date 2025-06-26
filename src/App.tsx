@@ -17,6 +17,7 @@ import InventoryManagement from './pages/InventoryManagement';
 import Analytics from './pages/Analytics';
 import OrderHistory from './pages/OrderHistory';
 import AIChat from './components/AIChat';
+import RaiseQuery from './pages/RaiseQuery';
 
 // Layout wrapper (optional)
 const AppLayout = ({ children }: { children: React.ReactNode }) => <>{children}</>;
@@ -47,6 +48,7 @@ function App() {
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/order-history" element={<OrderHistory />} />
+        <Route path="/raise-query" element={<RaiseQuery />} />
       </Routes>
     </>
   );
