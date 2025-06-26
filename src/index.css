@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #333;
+}
+
+/* Custom scrollbar for notification bar */
+.notifications::-webkit-scrollbar {
+  height: 6px;
+}
+.notifications::-webkit-scrollbar-thumb {
+  background: #764ba2;
+  border-radius: 3px;
+}
