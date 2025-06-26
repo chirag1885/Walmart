@@ -49,11 +49,8 @@ function App() {
         <Route path="/inventory" element={<InventoryManagement />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/order-history" element={<OrderHistory />} />
-<<<<<<< main
         <Route path="/feedback" element={<Feedback />} />
-=======
         <Route path="/raise-query" element={<RaiseQuery />} />
->>>>>>> main
       </Routes>
     </>
   );
