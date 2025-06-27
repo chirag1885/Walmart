@@ -134,8 +134,6 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50">
-      <FloatingCart />
-      
       {/* Header */}
       <header className="glassmorphism border-b backdrop-blur border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
