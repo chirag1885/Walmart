@@ -949,8 +949,6 @@ const ManagerDashboard = () => {
             {activeTab === 'feedback' && 'Review and respond to customer feedback'}
           </p>
         </div>
-
-        {/* Content based on active tab */}
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'customers' && renderCustomers()}
         {activeTab === 'feedback' && renderFeedback()}
