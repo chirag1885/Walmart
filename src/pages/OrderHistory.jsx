@@ -11,7 +11,10 @@ import {
   ArrowLeft,
   Download,
   Filter,
-  FileText
+  FileText,
+  Smartphone,
+  Check,
+  X
 } from 'lucide-react';
 
 /**
@@ -21,6 +24,7 @@ import {
  * @property {number} quantity
  * @property {number} price
  * @property {boolean} eco
+ * @property {boolean} checked
  */
 
 /**
@@ -32,6 +36,7 @@ import {
  * @property {OrderItem[]} items
  * @property {number} total
  * @property {string} paymentMethod
+ * @property {boolean} checked
  */
 
 const OrderHistory = () => {
@@ -41,6 +46,8 @@ const OrderHistory = () => {
   const [statusFilter, setStatusFilter] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [orders, setOrders] = useState([]);
+  const [showPhoneModal, setShowPhoneModal] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState('');
   
   // Mock data for demonstration
   useEffect(() => {
@@ -53,12 +60,13 @@ const OrderHistory = () => {
         status: 'delivered',
         total: 48.97,
         paymentMethod: 'Credit Card',
+        checked: true,
         items: [
-          { id: 1, name: 'Organic Bananas', quantity: 2, price: 4.99, eco: true },
-          { id: 2, name: 'Whole Grain Bread', quantity: 1, price: 3.49, eco: true },
-          { id: 3, name: 'Greek Yogurt', quantity: 3, price: 5.99, eco: false },
-          { id: 4, name: 'Free Range Eggs', quantity: 1, price: 6.99, eco: true },
-          { id: 5, name: 'Organic Spinach', quantity: 1, price: 3.49, eco: true },
+          { id: 1, name: 'Organic Bananas', quantity: 2, price: 4.99, eco: true, checked: true },
+          { id: 2, name: 'Whole Grain Bread', quantity: 1, price: 3.49, eco: true, checked: true },
+          { id: 3, name: 'Greek Yogurt', quantity: 3, price: 5.99, eco: false, checked: true },
+          { id: 4, name: 'Free Range Eggs', quantity: 1, price: 6.99, eco: true, checked: true },
+          { id: 5, name: 'Organic Spinach', quantity: 1, price: 3.49, eco: true, checked: true },
         ]
       },
       {
@@ -68,10 +76,11 @@ const OrderHistory = () => {
         status: 'delivered',
         total: 32.45,
         paymentMethod: 'Debit Card',
+        checked: true,
         items: [
-          { id: 6, name: 'Almond Milk', quantity: 2, price: 4.29, eco: true },
-          { id: 7, name: 'Organic Apples', quantity: 4, price: 1.99, eco: true },
-          { id: 8, name: 'Whole Wheat Pasta', quantity: 2, price: 2.99, eco: false },
+          { id: 6, name: 'Almond Milk', quantity: 2, price: 4.29, eco: true, checked: true },
+          { id: 7, name: 'Organic Apples', quantity: 4, price: 1.99, eco: true, checked: true },
+          { id: 8, name: 'Whole Wheat Pasta', quantity: 2, price: 2.99, eco: false, checked: true },
         ]
       },
       {
@@ -81,12 +90,13 @@ const OrderHistory = () => {
         status: 'delivered',
         total: 65.32,
         paymentMethod: 'Credit Card',
+        checked: false,
         items: [
-          { id: 9, name: 'Organic Chicken', quantity: 1, price: 15.99, eco: true },
-          { id: 10, name: 'Sweet Potatoes', quantity: 3, price: 2.49, eco: true },
-          { id: 11, name: 'Quinoa', quantity: 1, price: 8.99, eco: true },
-          { id: 12, name: 'Avocados', quantity: 4, price: 2.50, eco: true },
-          { id: 13, name: 'Blueberries', quantity: 2, price: 5.99, eco: false },
+          { id: 9, name: 'Organic Chicken', quantity: 1, price: 15.99, eco: true, checked: false },
+          { id: 10, name: 'Sweet Potatoes', quantity: 3, price: 2.49, eco: true, checked: false },
+          { id: 11, name: 'Quinoa', quantity: 1, price: 8.99, eco: true, checked: false },
+          { id: 12, name: 'Avocados', quantity: 4, price: 2.50, eco: true, checked: true },
+          { id: 13, name: 'Blueberries', quantity: 2, price: 5.99, eco: false, checked: false },
         ]
       },
       {
@@ -96,11 +106,12 @@ const OrderHistory = () => {
         status: 'delivered',
         total: 28.75,
         paymentMethod: 'PayPal',
+        checked: true,
         items: [
-          { id: 14, name: 'Almond Butter', quantity: 1, price: 9.99, eco: false },
-          { id: 15, name: 'Brown Rice', quantity: 2, price: 3.49, eco: true },
-          { id: 16, name: 'Organic Carrots', quantity: 1, price: 2.99, eco: true },
-          { id: 17, name: 'Hummus', quantity: 1, price: 4.99, eco: false },
+          { id: 14, name: 'Almond Butter', quantity: 1, price: 9.99, eco: false, checked: true },
+          { id: 15, name: 'Brown Rice', quantity: 2, price: 3.49, eco: true, checked: true },
+          { id: 16, name: 'Organic Carrots', quantity: 1, price: 2.99, eco: true, checked: true },
+          { id: 17, name: 'Hummus', quantity: 1, price: 4.99, eco: false, checked: true },
         ]
       },
       {
@@ -110,11 +121,12 @@ const OrderHistory = () => {
         status: 'processing',
         total: 53.67,
         paymentMethod: 'Credit Card',
+        checked: false,
         items: [
-          { id: 18, name: 'Organic Salmon', quantity: 1, price: 18.99, eco: true },
-          { id: 19, name: 'Mixed Greens', quantity: 2, price: 4.99, eco: true },
-          { id: 20, name: 'Cherry Tomatoes', quantity: 1, price: 3.99, eco: true },
-          { id: 21, name: 'Coconut Water', quantity: 3, price: 3.99, eco: false },
+          { id: 18, name: 'Organic Salmon', quantity: 1, price: 18.99, eco: true, checked: false },
+          { id: 19, name: 'Mixed Greens', quantity: 2, price: 4.99, eco: true, checked: false },
+          { id: 20, name: 'Cherry Tomatoes', quantity: 1, price: 3.99, eco: true, checked: false },
+          { id: 21, name: 'Coconut Water', quantity: 3, price: 3.99, eco: false, checked: false },
         ]
       },
       {
@@ -124,11 +136,12 @@ const OrderHistory = () => {
         status: 'shipped',
         total: 42.87,
         paymentMethod: 'Debit Card',
+        checked: false,
         items: [
-          { id: 22, name: 'Grass-fed Beef', quantity: 1, price: 15.99, eco: true },
-          { id: 23, name: 'Organic Broccoli', quantity: 2, price: 3.49, eco: true },
-          { id: 24, name: 'Wild Rice', quantity: 1, price: 7.99, eco: false },
-          { id: 25, name: 'Organic Oranges', quantity: 5, price: 1.29, eco: true },
+          { id: 22, name: 'Grass-fed Beef', quantity: 1, price: 15.99, eco: true, checked: false },
+          { id: 23, name: 'Organic Broccoli', quantity: 2, price: 3.49, eco: true, checked: true },
+          { id: 24, name: 'Wild Rice', quantity: 1, price: 7.99, eco: false, checked: false },
+          { id: 25, name: 'Organic Oranges', quantity: 5, price: 1.29, eco: true, checked: false },
         ]
       }
     ];
@@ -138,8 +151,9 @@ const OrderHistory = () => {
   const ordersPerPage = 3;
   
   const filteredOrders = orders.filter(order => {
-    // Apply status filter if selected
-    if (statusFilter && order.status !== statusFilter) return false;
+    // Apply checked filter if selected
+    if (statusFilter === 'checked' && !order.checked) return false;
+    if (statusFilter === 'not-checked' && order.checked) return false;
     
     // Apply search filter
     if (searchTerm) {
@@ -188,6 +202,15 @@ const OrderHistory = () => {
   const handleBackToOrders = () => {
     setSelectedOrder(null);
   };
+
+  const handleSendToPhone = () => {
+    if (phoneNumber.length >= 10) {
+      // Simulate sending to phone
+      alert(`Order details sent to ${phoneNumber}`);
+      setShowPhoneModal(false);
+      setPhoneNumber('');
+    }
+  };
   
   const renderOrderCard = (order) => {
     const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
@@ -198,7 +221,20 @@ const OrderHistory = () => {
         className="bg-white/80 backdrop-blur-sm rounded-xl p-5 shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg"
       >
         <div className="flex justify-between items-center mb-3">
-          <h3 className="font-bold text-gray-800">{order.id}</h3>
+          <div className="flex items-center space-x-3">
+            <h3 className="font-bold text-gray-800">{order.id}</h3>
+            {order.checked ? (
+              <div className="flex items-center space-x-1 text-green-600">
+                <Check className="h-4 w-4" />
+                <span className="text-xs">Checked</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-1 text-red-500">
+                <X className="h-4 w-4" />
+                <span className="text-xs">Not Checked</span>
+              </div>
+            )}
+          </div>
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
             {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
           </span>
@@ -243,6 +279,8 @@ const OrderHistory = () => {
     
     const ecoItems = selectedOrder.items.filter(item => item.eco).length;
     const ecoPercentage = Math.round((ecoItems / selectedOrder.items.length) * 100);
+    const checkedItems = selectedOrder.items.filter(item => item.checked).length;
+    const checkedPercentage = Math.round((checkedItems / selectedOrder.items.length) * 100);
     
     return (
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20 mb-6">
@@ -274,9 +312,9 @@ const OrderHistory = () => {
         
         <div className="mb-6">
           <h3 className="font-semibold text-gray-800 mb-3">Order Items</h3>
-          <div className="bg-gray-50 rounded-xl overflow-hidden">
+          <div className="bg-gray-50 rounded-xl overflow-hidden max-h-96 overflow-y-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-100">
+              <thead className="bg-gray-100 sticky top-0">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Item
@@ -289,6 +327,9 @@ const OrderHistory = () => {
                   </th>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Total
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
                   </th>
                 </tr>
               </thead>
@@ -316,6 +357,19 @@ const OrderHistory = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       ${(item.quantity * item.price).toFixed(2)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item.checked ? (
+                        <div className="flex items-center space-x-1 text-green-600">
+                          <Check className="h-4 w-4" />
+                          <span className="text-xs">Checked</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center space-x-1 text-red-500">
+                          <X className="h-4 w-4" />
+                          <span className="text-xs">Not Checked</span>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -351,8 +405,28 @@ const OrderHistory = () => {
           </div>
           
           <div className="md:w-1/2">
-            <h3 className="font-semibold text-gray-800 mb-3">Eco Impact</h3>
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border border-green-100">
+            <h3 className="font-semibold text-gray-800 mb-3">Order Status</h3>
+            <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-100 mb-4">
+              <div className="mb-2 flex justify-between items-center">
+                <span className="text-gray-700">Items checked:</span>
+                <span className="font-bold text-blue-600">{checkedItems} of {selectedOrder.items.length}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div 
+                  className="bg-blue-500 h-2.5 rounded-full" 
+                  style={{ width: `${checkedPercentage}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-600 mt-3">
+                {checkedPercentage === 100
+                  ? "All items have been checked by our team!"
+                  : checkedPercentage >= 50
+                  ? "Most items have been checked by our team."
+                  : "Items are being checked by our team."}
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border border-green-100 mb-4">
               <div className="mb-2 flex justify-between items-center">
                 <span className="text-gray-700">Eco-friendly items:</span>
                 <span className="font-bold text-green-600">{ecoItems} of {selectedOrder.items.length}</span>
@@ -373,8 +447,12 @@ const OrderHistory = () => {
             </div>
             
             <div className="mt-4">
-              <button className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-2 rounded-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300">
-                Reorder These Items
+              <button 
+                onClick={() => setShowPhoneModal(true)}
+                className="w-full bg-gradient-to-r from-emerald-500 to-blue-500 text-white py-2 rounded-lg hover:from-emerald-600 hover:to-blue-600 transition-all duration-300 flex items-center justify-center space-x-2"
+              >
+                <Smartphone className="h-4 w-4" />
+                <span>Send to Phone</span>
               </button>
             </div>
           </div>
@@ -422,7 +500,7 @@ const OrderHistory = () => {
                 <Filter className="h-4 w-4 text-gray-500" />
                 <span className="text-sm text-gray-700">Filter by status:</span>
                 <div className="flex space-x-2">
-                  {['all', 'delivered', 'processing', 'shipped'].map(status => (
+                  {['all', 'checked', 'not-checked'].map(status => (
                     <button
                       key={status}
                       className={`px-3 py-1 rounded-full text-xs ${
@@ -432,7 +510,7 @@ const OrderHistory = () => {
                       }`}
                       onClick={() => setStatusFilter(status === 'all' ? null : status)}
                     >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                      {status === 'not-checked' ? 'Not Checked' : status.charAt(0).toUpperCase() + status.slice(1)}
                     </button>
                   ))}
                 </div>
@@ -524,6 +602,46 @@ const OrderHistory = () => {
           renderOrderDetails()
         )}
       </div>
+
+      {/* Phone Modal */}
+      {showPhoneModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Send Order Details to Phone</h3>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Enter your phone number"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              />
+            </div>
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowPhoneModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSendToPhone}
+                disabled={phoneNumber.length < 10}
+                className={`flex-1 px-4 py-2 rounded-lg transition-colors ${
+                  phoneNumber.length >= 10
+                    ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
