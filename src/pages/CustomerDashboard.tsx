@@ -14,7 +14,9 @@ import {
   List,
   LogOut,
   Leaf,
+  Mic,
 } from "lucide-react";
+import VoiceAssistant from "../components/VoiceAssistant";
 import NotificationPanel from "../components/NotificationPanel";
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -110,11 +112,11 @@ const CustomerDashboard = () => {
       color: "from-emerald-500 to-emerald-600",
     },
     {
-      icon: ShoppingCart,
-      label: "View Cart",
-      path: "/cart",
-      color: "from-blue-500 to-blue-600",
-      badge: cartItems,
+      icon: Mic,
+      label: "Voice Assistant",
+      path: "#",
+      color: "from-purple-500 to-purple-600",
+      isComponent: true,
     },
     {
       icon: MapPin,
@@ -236,25 +238,37 @@ const CustomerDashboard = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {quickActions.map((action, index) => (
-              <button
-                key={index}
-                onClick={() => navigate(action.path)}
-                className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 group"
-              >
-                <div
-                  className={`w-12 h-12 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}
+              action.isComponent ? (
+                <div 
+                  key={index}
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 group"
                 >
-                  <action.icon className="h-6 w-6 text-white" />
+                  <VoiceAssistant 
+                    mode="button" 
+                    onSpeechResult={(text) => console.log("Voice result:", text)} 
+                  />
                 </div>
-                <span className="text-sm font-medium text-gray-800">
-                  {action.label}
-                </span>
-                {action.badge && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
-                    {action.badge}
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => navigate(action.path)}
+                  className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 group"
+                >
+                  <div
+                    className={`w-12 h-12 bg-gradient-to-br ${action.color} rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <action.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-800">
+                    {action.label}
                   </span>
-                )}
-              </button>
+                  {action.badge && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
+                      {action.badge}
+                    </span>
+                  )}
+                </button>
+              )
             ))}
           </div>
         </div>

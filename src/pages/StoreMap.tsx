@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, MapPin, Search, Navigation, Zap, Clock, ShoppingCart, Wifi, Car, Users, Star, Filter, Route, AlertCircle } from 'lucide-react';
+import { ArrowLeft, MapPin, Search, Navigation, Zap, Clock, ShoppingCart, Wifi, Car, Users, Star, Filter, Route, AlertCircle, Volume2, VolumeX } from 'lucide-react';
+import VoiceAssistant from '../components/VoiceAssistant';
 
 type ProductInfo = {
   section: string;
@@ -19,6 +20,9 @@ const StoreMap = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [userLocation, setUserLocation] = useState({ x: 50, y: 95 }); // Starting at entrance
   const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+  const [voiceDirectionsEnabled, setVoiceDirectionsEnabled] = useState(true);
+  const [voiceDirections, setVoiceDirections] = useState<string>('');
+  const [language, setLanguage] = useState<'en' | 'hi'>('en'); // Language selection state
 
   // Realistic store sections with proper positioning
   const storeSections = [
@@ -107,6 +111,30 @@ const StoreMap = () => {
     return Math.ceil(distance * 2); // seconds
   };
 
+  // Generate product directions based on language selection
+  const generateDirections = (product, language) => {
+    const sections = storeSections.find(section => section.id === productDatabase[product].section);
+    const sectionName = sections ? sections.name : productDatabase[product].section;
+    const shelfInfo = productDatabase[product].shelf;
+    const distance = calculateDistance(userLocation, productDatabase[product].position);
+    const time = calculateWalkingTime(distance);
+
+    if (language === 'en') {
+      return `${product} is located in the ${sectionName} section. ` +
+        `You'll find it at ${shelfInfo}. ` +
+        `It will take approximately ${time} seconds to walk there. ` +
+        `The price is ${productDatabase[product].price}. ` +
+        (productDatabase[product].inStock ? 'The product is in stock.' : 'Unfortunately, this product is currently out of stock.');
+    } else {
+      // Hindi directions
+      return `${product} ${sectionName} सेक्शन में स्थित है। ` +
+        `आप इसे ${shelfInfo} पर पाएंगे। ` +
+        `वहां जाने में लगभग ${time} सेकंड लगेंगे। ` +
+        `कीमत ${productDatabase[product].price} है। ` +
+        (productDatabase[product].inStock ? 'प्रोडक्ट स्टॉक में है।' : 'दुर्भाग्य से, यह प्रोडक्ट वर्तमान में स्टॉक से बाहर है।');
+    }
+  };
+  
   const handleProductSearch = (product) => {
     setSelectedProduct(product);
     setSearchTerm('');
@@ -115,6 +143,10 @@ const StoreMap = () => {
     const time = calculateWalkingTime(distance);
     setEstimatedTime(time);
     setShowPath(true);
+    
+    // Generate voice directions with current language
+    const directions = generateDirections(product, language);
+    setVoiceDirections(directions);
     
     // Simulate user movement over time
     setTimeout(() => {
@@ -413,10 +445,37 @@ const StoreMap = () => {
                     {estimatedTime && (
                       <div className="bg-blue-50 rounded-lg p-4">
                         <h5 className="font-medium text-blue-800 mb-2">Navigation:</h5>
-                        <div className="flex items-center space-x-2 text-sm">
-                          <Clock className="h-4 w-4 text-blue-600" />
-                          <span className="text-blue-700">Estimated walk time: {estimatedTime} seconds</span>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2 text-sm">
+                            <Clock className="h-4 w-4 text-blue-600" />
+                            <span className="text-blue-700">Estimated walk time: {estimatedTime} seconds</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <button 
+                              onClick={() => setVoiceDirectionsEnabled(!voiceDirectionsEnabled)}
+                              className={`p-1.5 rounded-full ${voiceDirectionsEnabled ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-500'}`}
+                              title={voiceDirectionsEnabled ? 
+                                (language === 'en' ? 'Disable voice directions' : 'आवाज निर्देश बंद करें') : 
+                                (language === 'en' ? 'Enable voice directions' : 'आवाज निर्देश चालू करें')}
+                            >
+                              {voiceDirectionsEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                            </button>
+
+                            <button
+                              onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+                              className={`p-1.5 rounded-full text-xs font-medium ${language === 'en' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}
+                              title={language === 'en' ? "Switch to Hindi" : "Switch to English"}
+                            >
+                              {language === 'en' ? 'हिं' : 'EN'}
+                            </button>
+                          </div>
                         </div>
+                        <VoiceAssistant 
+                          speakDirections={voiceDirectionsEnabled} 
+                          directions={voiceDirections} 
+                          language={language}
+                          className="mt-3" 
+                        />
                       </div>
                     )}
 
