@@ -151,19 +151,7 @@ const EmployeeDashboard = () => {
                 <ArrowLeft className="h-5 w-5 text-gray-600" />
               </button>
               <h1 className="text-xl font-bold text-gray-800">Employee Dashboard</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setChatOpen(!chatOpen)}
-                className="relative p-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-300"
-              >
-                <Bot className="h-5 w-5" />
-              </button>
-              <div className="flex items-center space-x-2">
-                <User className="h-5 w-5 text-gray-600" />
-                <span className="text-gray-600">EMP001</span>
-              </div>
-            </div>
+            </div> 
           </div>
         </div>
       </header>
