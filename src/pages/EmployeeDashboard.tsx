@@ -18,6 +18,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 
+
 const Notification = ({ message, isVisible, onClose }) => {
   useEffect(() => {
     if (isVisible) {
@@ -61,7 +62,9 @@ const EmployeeDashboard = () => {
   const [selectedQuery, setSelectedQuery] = useState<CustomerQuery | null>(
     null
   );
-
+  const goToInventory = () => {
+    navigate('/inventory', { state: { from: 'employee' } });
+  };
   const [customerQueries, setCustomerQueries] = useState([
     {
       id: 1,
@@ -279,8 +282,8 @@ const EmployeeDashboard = () => {
             Quick Actions
           </h2>
           <div className="bg-white/30 backdrop-blur-sm">
-            <div className="max-w-4xl px-4 sm:px-6 lg:px-8 py-6">
-              <div className="grid grid-cols-4 gap-5">
+            <div className="w-5xl px-4 sm:px-6 lg:px-8 py-6">
+              <div className="grid grid-cols-5 gap-14">
                 <button
                   onClick={() => {
                     navigate("/checkout");
@@ -293,7 +296,13 @@ const EmployeeDashboard = () => {
                     Checkout Dashboard
                   </span>
                 </button>
-
+                <button
+                  onClick={goToInventory}
+                  className="aspect-square flex flex-col items-center justify-center p-6 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-xl hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  <MapPin className="h-8 w-8 mb-3" />
+                  <span className="font-semibold text-center">Inventory</span>
+                </button>
                 <button
                   onClick={() => {
                     navigate("/cart-manager");
@@ -306,7 +315,16 @@ const EmployeeDashboard = () => {
                     Cart Manager
                   </span>
                 </button>
-
+                <button
+                  onClick={() => {
+                    navigate("/store-map-staff");
+                    showNotification("Opening Store Map...");
+                  }}
+                  className="aspect-square flex flex-col items-center justify-center p-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  <MapPin className="h-8 w-8 mb-3" />
+                  <span className="font-semibold text-center">Store Map</span>
+                </button>
                 <button
                   onClick={() => {
                     navigate("/profile");
@@ -318,17 +336,6 @@ const EmployeeDashboard = () => {
                   <span className="font-semibold text-center">
                     Employee Profile
                   </span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    navigate("/store-map-staff");
-                    showNotification("Opening Store Map...");
-                  }}
-                  className="aspect-square flex flex-col items-center justify-center p-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  <MapPin className="h-8 w-8 mb-3" />
-                  <span className="font-semibold text-center">Store Map</span>
                 </button>
               </div>
             </div>

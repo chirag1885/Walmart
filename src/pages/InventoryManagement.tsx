@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Package, AlertTriangle, Plus, Search, Filter, TrendingUp, TrendingDown, X, Save, Check } from 'lucide-react';
 
 const InventoryManagement = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -174,6 +175,15 @@ const InventoryManagement = () => {
     setRestockAmount(0);
   };
 
+  const fromDashboard = location.state?.from;
+  const handleOverviewClick = () => {
+    if (fromDashboard === 'employee') {
+      navigate('/employee');
+    } else {
+      navigate('/manager');
+    }
+  };
+
   const saveRestock = () => {
     if (!restockItem) return;
     setInventory(prevInventory =>
@@ -296,7 +306,7 @@ const InventoryManagement = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/manager')}
+                onClick={handleOverviewClick}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ArrowLeft className="h-5 w-5 text-gray-600" />
