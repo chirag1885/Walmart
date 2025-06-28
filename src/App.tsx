@@ -19,7 +19,12 @@ import OrderHistory from './pages/OrderHistory';
 import AIChat from './components/AIChat';
 import RaiseQuery from './pages/RaiseQuery';
 import Feedback from './pages/Feedback';
+import CheckoutDashboard from './pages/CheckoutDashboard';
+import EmployeeProfile from './pages/EmployeeProfile';
+import ReceiptViewer from './pages/ReceiptViewer';
 import Receipt from './pages/Receipt';
+import CartManager from './pages/CartManager';
+import StoremapStaff from './pages/StoremapStaff';
 
 // Layout wrapper (optional)
 const AppLayout = ({ children }: { children: React.ReactNode }) => <>{children}</>;
@@ -53,6 +58,12 @@ function App() {
         <Route path="/raise-query" element={<RaiseQuery />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/receipts" element={<Receipt />} />
+        <Route path="/checkout" element={<CheckoutDashboard />} />
+        <Route path="/cart-manager" element={<CartManager />} />
+        <Route path="/profile" element={<EmployeeProfile />} />
+        <Route path="/receipt/:receiptId" element={<ReceiptViewer />} />
+        <Route path="/store-map-staff" element={<StoremapStaff/>} />
+
       </Routes>
     </>
   );
