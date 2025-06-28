@@ -4,7 +4,7 @@ const NotificationPanel = ({ notifications, isOpen, onClose, onMarkAsRead, onMar
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50" onClick={onClose}>
-      <div className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out" onClick={(e) => e.stopPropagation()}>
+      <div className="fixed right-0 top-10 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out" onClick={(e) => e.stopPropagation()}>
         <div className="p-6 border-b">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-gray-800">Notifications</h2>
