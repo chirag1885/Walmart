@@ -25,6 +25,7 @@ import ReceiptViewer from './pages/ReceiptViewer';
 import Receipt from './pages/Receipt';
 import CartManager from './pages/CartManager';
 import StoremapStaff from './pages/StoremapStaff';
+import CartLidDemo from './pages/CartLidDemo';
 
 // Layout wrapper (optional)
 const AppLayout = ({ children }: { children: React.ReactNode }) => <>{children}</>;
@@ -63,6 +64,7 @@ function App() {
         <Route path="/profile" element={<EmployeeProfile />} />
         <Route path="/receipt/:receiptId" element={<ReceiptViewer />} />
         <Route path="/store-map-staff" element={<StoremapStaff/>} />
+        <Route path="/cart-lid-demo" element={<CartLidDemo />} />
 
       </Routes>
     </>
