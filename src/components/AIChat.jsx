@@ -101,15 +101,8 @@ const AIChat = () => {
     
     // Handle random/unrecognized messages
     if (!hasKeyword || message.length < 3) {
-      const unrecognizedResponses = [
-        "I'm sorry, I didn't quite understand that. 😅 Could you please rephrase your question? I can help you with store hours, offers, directions, product availability, and services.",
-        "I'm not sure what you're looking for. 🤔 I'm here to assist with DMart store information like opening hours, current deals, location details, and services. What would you like to know?",
-        "Sorry, I couldn't understand your message. 😊 I specialize in helping with store-related queries. You can ask me about store hours, offers, directions, parking, or services. How can I help?",
-        "I apologize, but I'm not sure how to help with that. 🙂 I'm designed to assist with DMart store information. Try asking about our store hours, current offers, location, or available services!",
-        "I'm having trouble understanding your request. 😌 Let me help you with store-related information instead! You can ask about opening hours, weekly deals, directions, or customer services."
-      ];
-      
-      return unrecognizedResponses[Math.floor(Math.random() * unrecognizedResponses.length)];
+      // Short, simple response when message is not understood
+      return "Sorry, I didn't understand. Please try again.";
     }
     
     // Default responses for recognized but unhandled queries

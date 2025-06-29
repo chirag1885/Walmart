@@ -91,21 +91,28 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
         setAvailableVoices(voices);
         
         // Select a voice based on language preference
-        const preferredLangPrefix = language === 'en' ? 'en-' : 'hi-';
-        const preferredVoice = voices.find(voice => voice.lang.startsWith(preferredLangPrefix));
+        let preferredVoice = null;
         
+        // First try to find a specific Hindi voice when needed
+        if (language === 'hi') {
+          preferredVoice = voices.find(voice => voice.lang === 'hi-IN');
+          
+          // If no Hindi voice is found, try for any Indian voice
+          if (!preferredVoice) {
+            preferredVoice = voices.find(voice => voice.lang === 'en-IN');
+          }
+        } else {
+          // For English, prefer US or UK voices
+          preferredVoice = voices.find(voice => voice.lang === 'en-US' || voice.lang === 'en-GB');
+        }
+        
+        // If no appropriate voice found, use any available voice
         if (preferredVoice) {
           setSelectedVoice(preferredVoice);
-        } else if (language === 'hi') {
-          // Fallback for Hindi - try to find any Indian voice
-          const indianVoice = voices.find(voice => voice.lang.startsWith('en-IN'));
-          if (indianVoice) {
-            setSelectedVoice(indianVoice);
-          } else if (voices.length > 0) {
-            setSelectedVoice(voices[0]); // Default fallback
-          }
+          console.log('Selected voice:', preferredVoice.name, preferredVoice.lang);
         } else if (voices.length > 0) {
           setSelectedVoice(voices[0]); // Default fallback
+          console.log('Fallback voice:', voices[0].name, voices[0].lang);
         }
       };
       
@@ -203,6 +210,14 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
         checkoutResponse: "The checkout lanes are at the front of the store. The self-checkout stations are on the right side of the checkout area.",
         vegetablesResponse: "Fresh vegetables are in the Produce section, next to the fruits, at the front left of the store.",
         meatResponse: "Meat and seafood are in their dedicated section at the back right corner of the store.",
+        snacksResponse: "Snacks and chips are in Aisle 4, in the center of the store. Would you like me to guide you there?",
+        beveragesResponse: "Beverages including soft drinks and juices are in Aisle 6, near the back of the store.",
+        frozenFoodResponse: "Frozen foods are located in the Frozen section at the back left corner of the store.",
+        cerealResponse: "Breakfast cereals are in Aisle 2, in the breakfast foods section.",
+        riceResponse: "Rice, pasta and grains are in Aisle 3, in the middle section of the store.",
+        spicesResponse: "Spices and condiments are in Aisle 5, near the center of the store.",
+        householdResponse: "Household items and cleaning products are in Aisle 8, at the far right side of the store.",
+        personalCareResponse: "Personal care items and toiletries are in Aisle 7, next to the household items section.",
         helpResponse: "I can help you find products, check prices, or provide directions in the store. What would you like help with?",
         thanksResponse: "You're welcome! Happy to help with your shopping experience.",
         greetingResponse: "Hello! How can I help with your shopping today?",
@@ -215,6 +230,14 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
         checkoutResponse: "चेकआउट लेन स्टोर के सामने हैं। सेल्फ-चेकआउट स्टेशन चेकआउट क्षेत्र के दाईं ओर हैं।",
         vegetablesResponse: "ताजी सब्जियां प्रोड्यूस सेक्शन में हैं, फलों के पास, स्टोर के आगे बाईं ओर।",
         meatResponse: "मांस और समुद्री भोजन अपने समर्पित अनुभाग में स्टोर के पिछले दाएं कोने पर हैं।",
+        snacksResponse: "स्नैक्स और चिप्स आइल 4 में हैं, स्टोर के मध्य में। क्या आप चाहते हैं कि मैं आपको वहां ले जाऊं?",
+        beveragesResponse: "पेय पदार्थ, सॉफ्ट ड्रिंक्स और जूस आइल 6 में हैं, स्टोर के पीछे के पास।",
+        frozenFoodResponse: "फ्रोजन फूड स्टोर के बाएँ पिछले कोने में फ्रोजन सेक्शन में स्थित हैं।",
+        cerealResponse: "नाश्ते के लिए अनाज आइल 2 में हैं, नाश्ते के खाद्य पदार्थों के सेक्शन में।",
+        riceResponse: "चावल, पास्ता और अनाज आइल 3 में हैं, स्टोर के मध्य भाग में।",
+        spicesResponse: "मसाले और सॉस आइल 5 में हैं, स्टोर के केंद्र के पास।",
+        householdResponse: "घरेलू सामान और सफाई उत्पाद आइल 8 में हैं, स्टोर के सबसे दाईं ओर।",
+        personalCareResponse: "व्यक्तिगत देखभाल वस्तुएं और टॉयलेट्रीज़ आइल 7 में हैं, घरेलू वस्तुओं के सेक्शन के बगल में।",
         helpResponse: "मैं आपको उत्पाद ढूंढने, कीमतें जांचने, दिशानिर्देश प्राप्त करने में मदद कर सकता हूं। आप किस प्रकार की मदद चाहते हैं?",
         thanksResponse: "आपका स्वागत है! आपके शॉपिंग अनुभव में मदद करके खुशी हुई।",
         greetingResponse: "नमस्ते! आज मैं आपकी शॉपिंग में कैसे मदद कर सकता हूं?",
@@ -225,48 +248,101 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
     const t = translations[language]; // Get translations for current language
     const lowerQuery = query.toLowerCase();
     
+    // Define location query terms for better recognition
+    const locationTermsEn = ['where', 'find', 'locate', 'show me', 'take me to', 'guide me to', 'how to get to', 'direction to'];
+    const locationTermsHi = ['कहां', 'कहा', 'पर', 'ढूंढें', 'खोजें', 'बताइए', 'दिखाइए', 'ले चलिए', 'कैसे जाएं', 'रास्ता', 'जगह', 'मिलेंगी'];
+    
+    // Helper function to check if query contains location terms
+    const hasLocationTerm = (q: string) => {
+      if (language === 'en') {
+        return locationTermsEn.some(term => q.includes(term));
+      } else {
+        return locationTermsHi.some(term => q.includes(term));
+      }
+    };
+    
     // Enhanced pattern matching for a wider range of commands and questions
     // Product location queries
-    if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-         lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-        (lowerQuery.includes('milk') || lowerQuery.includes('dairy') || lowerQuery.includes('दूध'))) {
+    if (hasLocationTerm(lowerQuery) && 
+        (lowerQuery.includes('milk') || lowerQuery.includes('dairy') || lowerQuery.includes('दूध') || lowerQuery.includes('डेयरी'))) {
       response = t.dairyResponse;
     } 
-    else if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-              lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-             (lowerQuery.includes('bread') || lowerQuery.includes('bakery') || lowerQuery.includes('ब्रेड'))) {
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('bread') || lowerQuery.includes('bakery') || lowerQuery.includes('ब्रेड') || lowerQuery.includes('बेकरी'))) {
       response = t.bakeryResponse;
     }
-    else if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-              lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-             (lowerQuery.includes('fruit') || lowerQuery.includes('apple') || lowerQuery.includes('फल'))) {
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('fruit') || lowerQuery.includes('apple') || lowerQuery.includes('फल') || 
+              lowerQuery.includes('सेब') || lowerQuery.includes('केला') || lowerQuery.includes('banana'))) {
       response = t.fruitResponse;
     }
-    else if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-              lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-             (lowerQuery.includes('checkout') || lowerQuery.includes('pay') || lowerQuery.includes('चेकआउट'))) {
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('checkout') || lowerQuery.includes('pay') || lowerQuery.includes('bill') || 
+              lowerQuery.includes('चेकआउट') || lowerQuery.includes('भुगतान') || lowerQuery.includes('बिल'))) {
       response = t.checkoutResponse;
     }
-    else if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-              lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-             (lowerQuery.includes('vegetable') || lowerQuery.includes('veggies') || lowerQuery.includes('सब्जी'))) {
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('vegetable') || lowerQuery.includes('veggies') || lowerQuery.includes('सब्जी') || 
+              lowerQuery.includes('वेजिटेबल') || lowerQuery.includes('सब्जियां') || lowerQuery.includes('हरी सब्जी'))) {
       response = t.vegetablesResponse;
     }
-    else if ((lowerQuery.includes('where') || lowerQuery.includes('find') || lowerQuery.includes('locate') || 
-              lowerQuery.includes('कहां') || lowerQuery.includes('कहा') || lowerQuery.includes('ढूंढें')) && 
-             (lowerQuery.includes('meat') || lowerQuery.includes('chicken') || lowerQuery.includes('मांस'))) {
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('meat') || lowerQuery.includes('chicken') || lowerQuery.includes('fish') || 
+              lowerQuery.includes('मांस') || lowerQuery.includes('चिकन') || lowerQuery.includes('मछली'))) {
       response = t.meatResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('snack') || lowerQuery.includes('chip') || lowerQuery.includes('स्नैक्स') || 
+              lowerQuery.includes('चिप्स') || lowerQuery.includes('नमकीन'))) {
+      response = t.snacksResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('beverage') || lowerQuery.includes('drink') || lowerQuery.includes('juice') || 
+              lowerQuery.includes('soda') || lowerQuery.includes('पेय') || lowerQuery.includes('जूस') || 
+              lowerQuery.includes('कोल्ड ड्रिंक') || lowerQuery.includes('पानी'))) {
+      response = t.beveragesResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('frozen') || lowerQuery.includes('ice cream') || lowerQuery.includes('फ्रोजन') || 
+              lowerQuery.includes('आइस क्रीम') || lowerQuery.includes('जमे हुए'))) {
+      response = t.frozenFoodResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('cereal') || lowerQuery.includes('breakfast') || lowerQuery.includes('सीरियल') || 
+              lowerQuery.includes('नाश्ता') || lowerQuery.includes('ब्रेकफास्ट'))) {
+      response = t.cerealResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('rice') || lowerQuery.includes('pasta') || lowerQuery.includes('grain') || 
+              lowerQuery.includes('चावल') || lowerQuery.includes('पास्ता') || lowerQuery.includes('अनाज'))) {
+      response = t.riceResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('spice') || lowerQuery.includes('condiment') || lowerQuery.includes('sauce') || 
+              lowerQuery.includes('मसाला') || lowerQuery.includes('मसाले') || lowerQuery.includes('सॉस'))) {
+      response = t.spicesResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('household') || lowerQuery.includes('cleaning') || lowerQuery.includes('detergent') || 
+              lowerQuery.includes('घरेलू') || lowerQuery.includes('सफाई') || lowerQuery.includes('डिटर्जेंट'))) {
+      response = t.householdResponse;
+    }
+    else if (hasLocationTerm(lowerQuery) && 
+             (lowerQuery.includes('personal') || lowerQuery.includes('toiletries') || lowerQuery.includes('soap') || 
+              lowerQuery.includes('shampoo') || lowerQuery.includes('व्यक्तिगत') || lowerQuery.includes('साबुन') || 
+              lowerQuery.includes('शैंपू') || lowerQuery.includes('टॉयलेट्री'))) {
+      response = t.personalCareResponse;
     }
     
     // Help and greeting
     else if (lowerQuery.includes('help') || lowerQuery.includes('मदद') || lowerQuery.includes('सहायता')) {
       response = t.helpResponse;
     }
-    else if (lowerQuery.includes('thank') || lowerQuery.includes('धन्यवाद')) {
+    else if (lowerQuery.includes('thank') || lowerQuery.includes('धन्यवाद') || lowerQuery.includes('शुक्रिया')) {
       response = t.thanksResponse;
     }
     else if (lowerQuery.includes('hello') || lowerQuery.includes('hi') || lowerQuery.includes('hey') || 
-             lowerQuery.includes('नमस्ते') || lowerQuery.includes('हैलो')) {
+             lowerQuery.includes('नमस्ते') || lowerQuery.includes('हैलो') || lowerQuery.includes('हाय')) {
       response = t.greetingResponse;
     }
     else {
@@ -284,6 +360,33 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
       onSpeechResult(result);
     }
   }, [isListening, speechText, onSpeechResult, processQuery]);
+  
+  // Update the recognition language when language prop changes
+  useEffect(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = language === 'en' ? 'en-US' : 'hi-IN';
+    }
+    
+    // Update voice selection when language changes
+    if (availableVoices.length > 0) {
+      const preferredLangPrefix = language === 'en' ? 'en-' : 'hi-';
+      const preferredVoice = availableVoices.find(voice => voice.lang.startsWith(preferredLangPrefix));
+      
+      if (preferredVoice) {
+        setSelectedVoice(preferredVoice);
+      } else if (language === 'hi') {
+        // Fallback for Hindi - try to find any Indian voice
+        const indianVoice = availableVoices.find(voice => voice.lang.startsWith('en-IN'));
+        if (indianVoice) {
+          setSelectedVoice(indianVoice);
+        } else if (availableVoices.length > 0) {
+          setSelectedVoice(availableVoices[0]); // Default fallback
+        }
+      } else if (availableVoices.length > 0) {
+        setSelectedVoice(availableVoices[0]); // Default fallback
+      }
+    }
+  }, [language, availableVoices]);
 
   // State for language selection
   const [currentLanguage, setCurrentLanguage] = useState(language);
@@ -507,10 +610,10 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
           ) : (
             <>
               <button
-                onClick={() => speakText("मुझे दूध कहाँ मिल सकता है?")}
+                onClick={() => speakText("दूध कहां पर है?")}
                 className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 text-sm text-left text-gray-800 transition-colors"
               >
-                "मुझे दूध कहाँ मिल सकता है?"
+                "दूध कहां पर है?"
               </button>
               <button
                 onClick={() => speakText("बेकरी सेक्शन कहां है?")}
@@ -519,16 +622,16 @@ const VoiceAssistant: React.FC<VoiceAssistantProps> = ({
                 "बेकरी सेक्शन कहां है?"
               </button>
               <button
-                onClick={() => speakText("मुझे ताजे फल ढूंढने में मदद चाहिए।")}
+                onClick={() => speakText("ताजे फल कहां मिलेंगे?")}
                 className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 text-sm text-left text-gray-800 transition-colors"
               >
-                "मुझे ताजे फल ढूंढने में मदद चाहिए।"
+                "ताजे फल कहां मिलेंगे?"
               </button>
               <button
-                onClick={() => speakText("चेकआउट लेन्स कहाँ हैं?")}
+                onClick={() => speakText("सब्जियां कहां मिलेंगी?")}
                 className="bg-gray-100 hover:bg-gray-200 rounded-lg p-2 text-sm text-left text-gray-800 transition-colors"
               >
-                "चेकआउट लेन्स कहाँ हैं?"
+                "सब्जियां कहां मिलेंगी?"
               </button>
             </>
           )}

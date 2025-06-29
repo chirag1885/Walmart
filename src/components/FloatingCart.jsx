@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart } from "lucide-react";
+import CartLid from "./CartLid";
 
 export default function FloatingCart() {
   const [isVisible, setIsVisible] = useState(false);
   const [cartCount] = useState(3);
+  const [isLidOpen, setIsLidOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,7 @@ export default function FloatingCart() {
 
   const handleCartClick = () => {
     console.log('Floating cart clicked - implement cart modal');
+    setIsLidOpen(!isLidOpen);
   };
 
   return (
@@ -31,7 +34,7 @@ export default function FloatingCart() {
           className="fixed bottom-8 right-8 z-50 glassmorphism rounded-full p-4 cursor-pointer shadow-2xl"
           onClick={handleCartClick}
         >
-          <ShoppingCart className="h-6 w-6 text-emerald-600" />
+          <CartLid isOpen={isLidOpen} color="emerald" size="sm" />
           {cartCount > 0 && (
             <motion.div
               initial={{ scale: 0 }}

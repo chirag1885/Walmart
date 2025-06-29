@@ -15,6 +15,8 @@ import {
   LogOut,
   Leaf,
   Mic,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import VoiceAssistant from "../components/VoiceAssistant";
 import NotificationPanel from "../components/NotificationPanel";
@@ -24,12 +26,19 @@ const CustomerDashboard = () => {
   const [notifications] = useState(2);
   const [viewMode, setViewMode] = useState("grid");
   const cartNumber = localStorage.getItem("cartNumber") || "CART-001";
+  const [isCartLidOpen, setIsCartLidOpen] = useState(false);
+  
   const handleLogout = () => {
     localStorage.removeItem("userType");
     localStorage.removeItem("cartNumber");
     navigate("/login");
   };
   const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState(false);
+  
+  // Toggle cart lid status function
+  const toggleCartLid = () => {
+    setIsCartLidOpen(!isCartLidOpen);
+  };
 
   // Sample notifications data
   const [notificationsData, setNotificationsData] = useState([
@@ -195,6 +204,23 @@ const CustomerDashboard = () => {
               <span className="text-sm text-emerald-600 font-medium">
                 Cart: {cartNumber}
               </span>
+              <span className="text-gray-400">|</span>
+              <div
+                className={`flex items-center space-x-1 px-3 py-1 rounded-full ${isCartLidOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                title={isCartLidOpen ? "Cart Lid is Open" : "Cart Lid is Closed"}
+              >
+                {isCartLidOpen ? (
+                  <>
+                    <Unlock className="h-3 w-3" />
+                    <span className="text-xs font-medium">Lid Open</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="h-3 w-3" />
+                    <span className="text-xs font-medium">Lid Closed</span>
+                  </>
+                )}
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <button
@@ -221,14 +247,44 @@ const CustomerDashboard = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Welcome back, Mahak!
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Ready for a smart shopping experience?
-          </p>
+        {/* Welcome Section with Advertisement */}
+        <div className="flex flex-col md:flex-row justify-between mb-8 gap-6">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              Welcome back, Mahak!
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Ready for a smart shopping experience?
+            </p>
+          </div>
+          
+          {/* Walmart Advertisement */}
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 shadow-lg border border-blue-200 max-w-md">
+            <div className="flex items-center mb-3">
+              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                </svg>
+              </div>
+              <span className="font-bold text-blue-800 text-lg">Walmart Advertisement</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="w-24 h-24 bg-white rounded-lg flex items-center justify-center p-2">
+                <img 
+                  src="https://corporate.walmart.com/content/dam/corporate/images/logos/walmart/walmart-logo-blue.svg" 
+                  alt="Walmart" 
+                  className="max-w-full max-h-full"
+                />
+              </div>
+              <div>
+                <h3 className="font-bold text-blue-900 mb-1">Summer Sale!</h3>
+                <p className="text-sm text-blue-700 mb-3">Get up to 40% off on selected items this weekend only.</p>
+                <button className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 px-3 py-1 rounded-lg text-sm font-semibold transition-colors">
+                  Shop Now
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Quick Actions */}
@@ -701,6 +757,99 @@ const CustomerDashboard = () => {
               <p className="text-sm text-gray-600">
                 Great job! You're making eco-friendly choices.
               </p>
+            </div>
+
+            {/* Today's Discounts */}
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 shadow-xl border border-amber-100 mt-8">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-800">Today's Special Discounts</h3>
+                  <p className="text-sm text-gray-600">Limited time offers</p>
+                </div>
+              </div>
+              
+              <div className="space-y-3 max-h-[280px] overflow-y-auto pr-2 custom-scrollbar">
+                {/* Discount Item 1 */}
+                <div className="bg-white rounded-lg p-3 border border-amber-100 group hover:border-amber-300 transition-all">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0 w-14 h-14 bg-amber-100 rounded-lg flex items-center justify-center">
+                      <ShoppingCart className="h-7 w-7 text-amber-600" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex justify-between">
+                        <h4 className="font-medium text-gray-800">Organic Bananas</h4>
+                        <div className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold">-30%</div>
+                      </div>
+                      <div className="flex items-center mt-1">
+                        <span className="text-sm line-through text-gray-400 mr-2">$3.99</span>
+                        <span className="font-semibold text-red-600">$2.79</span>
+                      </div>
+                    </div>
+                    <button className="bg-amber-100 hover:bg-amber-200 text-amber-700 p-2 rounded-full transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Discount Item 2 */}
+                <div className="bg-white rounded-lg p-3 border border-amber-100 group hover:border-amber-300 transition-all">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0 w-14 h-14 bg-red-100 rounded-lg flex items-center justify-center">
+                      <Leaf className="h-7 w-7 text-red-600" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex justify-between">
+                        <h4 className="font-medium text-gray-800">Fresh Strawberries</h4>
+                        <div className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold">-25%</div>
+                      </div>
+                      <div className="flex items-center mt-1">
+                        <span className="text-sm line-through text-gray-400 mr-2">$5.99</span>
+                        <span className="font-semibold text-red-600">$4.49</span>
+                      </div>
+                    </div>
+                    <button className="bg-amber-100 hover:bg-amber-200 text-amber-700 p-2 rounded-full transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Discount Item 3 */}
+                <div className="bg-white rounded-lg p-3 border border-amber-100 group hover:border-amber-300 transition-all">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0 w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <ShoppingCart className="h-7 w-7 text-blue-600" />
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex justify-between">
+                        <h4 className="font-medium text-gray-800">Almond Milk</h4>
+                        <div className="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold">-20%</div>
+                      </div>
+                      <div className="flex items-center mt-1">
+                        <span className="text-sm line-through text-gray-400 mr-2">$4.49</span>
+                        <span className="font-semibold text-red-600">$3.59</span>
+                      </div>
+                    </div>
+                    <button className="bg-amber-100 hover:bg-amber-200 text-amber-700 p-2 rounded-full transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <button className="w-full mt-4 bg-gradient-to-r from-amber-500 to-yellow-500 text-white py-2 rounded-xl font-semibold hover:from-amber-600 hover:to-yellow-600 transition-all duration-300">
+                View All Discounts
+              </button>
             </div>
           </div>
         </div>
