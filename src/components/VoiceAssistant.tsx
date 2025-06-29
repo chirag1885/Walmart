@@ -1,6 +1,18 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Mic, MicOff, Volume2, PlayCircle, PauseCircle } from 'lucide-react';
 
+// Extend the Window interface for SpeechRecognition types
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
+// If SpeechRecognition is not defined, define it as any to avoid TS errors
+// @ts-ignore
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
 type VoiceAssistantProps = {
   mode?: 'button' | 'full'; // button mode for QuickActions, full for detailed implementation
   onSpeechResult?: (text: string) => void; // Callback when speech is recognized

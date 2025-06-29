@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Receipt, Calendar, Search, Filter, ChevronDown, ShoppingBag, CreditCard, ArrowLeft, Smartphone, Check } from 'lucide-react';
+import { Receipt, CreditCard, ArrowLeft, Smartphone, Check} from 'lucide-react';
+import QRCode from 'react-qr-code';
 
 /**
  * @typedef {Object} ReceiptItem
@@ -116,6 +117,18 @@ const Receipts = () => {
               <p className="text-sm text-gray-500 mt-2">
                 {formatDate(selectedReceipt.date)} at {selectedReceipt.time}
               </p>
+              
+              {/* QR Code */}
+              <div className="mt-6">
+                <div className="bg-white p-3 inline-block rounded-lg border border-gray-200 shadow-sm">
+                  <QRCode 
+                    value={`${selectedReceipt.id}-${selectedReceipt.transactionId}-${selectedReceipt.total}`}
+                    size={140}
+                    level="H"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Scan to verify receipt authenticity</p>
+              </div>
             </div>
 
             {/* Items */}
