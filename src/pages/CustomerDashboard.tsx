@@ -520,33 +520,6 @@ const CustomerDashboard = () => {
                 </div>
               </div>
             </div>
-
-            {/* Search Products */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Find Products
-              </h3>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                />
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {["Organic", "Dairy", "Bakery", "Frozen", "Beverages"].map(
-                  (category) => (
-                    <button
-                      key={category}
-                      className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm hover:bg-emerald-200 transition-colors"
-                    >
-                      {category}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
           </div>
 
           {/* Right Column */}
