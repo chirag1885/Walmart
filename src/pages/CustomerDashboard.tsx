@@ -19,13 +19,43 @@ import {
 import VoiceAssistant from "../components/VoiceAssistant";
 import NotificationPanel from "../components/NotificationPanel";
 
+ const products = [
+    {
+      id: 1,
+      name: "Organic Apples",
+      description: "Fresh, locally sourced",
+      price: "$4.99",
+      image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=400&fit=crop&crop=center"
+    },
+    {
+      id: 2,
+      name: "Organic Carrots",
+      description: "Fresh, locally sourced",
+      price: "$3.49",
+      image: "https://images.unsplash.com/photo-1445282768818-728615cc910a?w=400&h=400&fit=crop&crop=center"
+    },
+    {
+      id: 3,
+      name: "Organic Wheat Bread",
+      description: "Fresh, locally sourced",
+      price: "$5.99",
+      image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=400&fit=crop&crop=center"
+    },
+    {
+      id: 4,
+      name: "Organic Grapes",
+      description: "Fresh, locally sourced",
+      price: "$6.99",
+      image: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=400&h=400&fit=crop&crop=center"
+    }
+  ];
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [cartItems] = useState(4);
   const [notifications] = useState(2);
   const [viewMode, setViewMode] = useState("grid");
   const cartNumber = localStorage.getItem("cartNumber") || "CART-001";
-  
+
   const handleLogout = () => {
     localStorage.removeItem("userType");
     localStorage.removeItem("cartNumber");
@@ -83,46 +113,47 @@ const CustomerDashboard = () => {
       id: 1,
       brand: "Walmart",
       title: "Summer Sale Extravaganza!",
-      description: "Get up to 40% off on selected items this weekend only. Fresh groceries, electronics, and more!",
+      description:
+        "Get up to 40% off on selected items this weekend only. Fresh groceries, electronics, and more!",
       discount: "40% OFF",
       validUntil: "This Weekend",
       bgGradient: "from-blue-500 to-blue-600",
       accentColor: "yellow-400",
       rating: 4.8,
-      category: "Groceries & More"
+      category: "Groceries & More",
     },
     {
       id: 2,
       brand: "Target",
       title: "Back to School Deals",
-      description: "Everything you need for the new school year. Supplies, clothing, and tech essentials.",
+      description:
+        "Everything you need for the new school year. Supplies, clothing, and tech essentials.",
       discount: "30% OFF",
       validUntil: "Limited Time",
       bgGradient: "from-red-500 to-red-600",
       accentColor: "white",
       rating: 4.6,
-      category: "School & Office"
+      category: "School & Office",
     },
     {
       id: 3,
       brand: "Amazon Fresh",
       title: "Fresh Groceries Delivered",
-      description: "Same-day delivery on fresh produce, pantry staples, and household essentials.",
+      description:
+        "Same-day delivery on fresh produce, pantry staples, and household essentials.",
       discount: "FREE DELIVERY",
       validUntil: "For Prime Members",
       bgGradient: "from-orange-500 to-orange-600",
       accentColor: "white",
       rating: 4.7,
-      category: "Fresh Groceries"
-    }
+      category: "Fresh Groceries",
+    },
   ];
 
   // Auto-rotate advertisements
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentAdIndex((prevIndex) => 
-        (prevIndex + 1) % advertisements.length
-      );
+      setCurrentAdIndex((prevIndex) => (prevIndex + 1) % advertisements.length);
     }, 8000); // Change ad every 8 seconds
 
     return () => clearInterval(interval);
@@ -220,7 +251,7 @@ const CustomerDashboard = () => {
           background: #89d9a8;
         }
       `}</style>
-      
+
       {/* Notification Panel */}
       <NotificationPanel
         notifications={notificationsData}
@@ -289,18 +320,20 @@ const CustomerDashboard = () => {
               Ready for a smart shopping experience?
             </p>
           </div>
-          
+
           {/* Enhanced Advertisement Panel - Wider and Shorter */}
-          <div className={`relative bg-gradient-to-r ${currentAd.bgGradient} rounded-2xl p-6 shadow-2xl border border-white/20 overflow-hidden transform transition-all duration-500 hover:scale-[1.02] h-32`}>
+          <div
+            className={`relative bg-gradient-to-r ${currentAd.bgGradient} rounded-2xl p-6 shadow-2xl border border-white/20 overflow-hidden transform transition-all duration-500 hover:scale-[1.02] h-32`}
+          >
             {/* Ad indicator dots */}
             <div className="absolute top-4 right-4 flex space-x-2">
               {advertisements.map((_, index) => (
                 <div
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentAdIndex 
-                      ? `bg-${currentAd.accentColor}` 
-                      : 'bg-white/40'
+                    index === currentAdIndex
+                      ? `bg-${currentAd.accentColor}`
+                      : "bg-white/40"
                   }`}
                 />
               ))}
@@ -316,10 +349,14 @@ const CustomerDashboard = () => {
                   </div>
                   <div>
                     <div className="flex items-center space-x-2 mb-1">
-                      <span className="font-bold text-white text-xl">{currentAd.brand}</span>
+                      <span className="font-bold text-white text-xl">
+                        {currentAd.brand}
+                      </span>
                       <div className="flex items-center space-x-1">
                         <Star className="h-4 w-4 text-yellow-300 fill-current" />
-                        <span className="text-white/90 text-sm font-medium">{currentAd.rating}</span>
+                        <span className="text-white/90 text-sm font-medium">
+                          {currentAd.rating}
+                        </span>
                       </div>
                     </div>
                     <span className="text-white/70 text-sm bg-white/20 px-2 py-1 rounded-full">
@@ -330,14 +367,20 @@ const CustomerDashboard = () => {
 
                 {/* Main content */}
                 <div className="flex-1">
-                  <h3 className="font-bold text-white text-2xl mb-2">{currentAd.title}</h3>
-                  <p className="text-white/90 text-sm leading-relaxed max-w-md">{currentAd.description}</p>
+                  <h3 className="font-bold text-white text-2xl mb-2">
+                    {currentAd.title}
+                  </h3>
+                  <p className="text-white/90 text-sm leading-relaxed max-w-md">
+                    {currentAd.description}
+                  </p>
                 </div>
               </div>
 
               {/* Right side - Offer details */}
               <div className="flex flex-col items-end space-y-3">
-                <div className={`bg-${currentAd.accentColor} text-gray-900 px-4 py-2 rounded-full font-bold text-lg shadow-lg`}>
+                <div
+                  className={`bg-${currentAd.accentColor} text-gray-900 px-4 py-2 rounded-full font-bold text-lg shadow-lg`}
+                >
                   {currentAd.discount}
                 </div>
                 <div className="flex items-center text-white/80 text-sm">
@@ -360,15 +403,17 @@ const CustomerDashboard = () => {
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {quickActions.map((action, index) => (
+            {quickActions.map((action, index) =>
               action.isComponent ? (
-                <div 
+                <div
                   key={index}
                   className="relative bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20 group"
                 >
-                  <VoiceAssistant 
-                    mode="button" 
-                    onSpeechResult={(text) => console.log("Voice result:", text)} 
+                  <VoiceAssistant
+                    mode="button"
+                    onSpeechResult={(text) =>
+                      console.log("Voice result:", text)
+                    }
                   />
                 </div>
               ) : (
@@ -387,7 +432,7 @@ const CustomerDashboard = () => {
                   </span>
                 </button>
               )
-            ))}
+            )}
           </div>
         </div>
 
@@ -430,34 +475,49 @@ const CustomerDashboard = () => {
                   </button>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((item) => (
-                  <div
-                    key={item}
-                    className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
-                  >
-                    <div className="aspect-square bg-gradient-to-br from-emerald-100 to-blue-100 rounded-lg mb-3 flex items-center justify-center">
-                      <ShoppingCart className="h-8 w-8 text-emerald-600" />
-                    </div>
-                    <h4 className="font-semibold text-gray-800 mb-1">
-                      Organic Product {item}
-                    </h4>
-                    <p className="text-sm text-gray-600 mb-2">
-                      Fresh, locally sourced
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-emerald-600">
-                        $4.99
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <Leaf className="h-4 w-4 text-green-500" />
-                        <span className="text-xs text-green-600">
-                          Eco-friendly
-                        </span>
-                      </div>
-                    </div>
+              <div className="p-6 bg-gray-50 min-h-screen">
+                <div className="max-w-4xl mx-auto">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    Organic Products
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {products.map((product) => {
+                      return (
+                        <div
+                          key={product.id}
+                          className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
+                        >
+                          <div className="aspect-square bg-gradient-to-br from-emerald-100 to-blue-100 rounded-lg mb-3 overflow-hidden relative">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm rounded-full p-1">
+                            </div>
+                          </div>
+                          <h4 className="font-semibold text-gray-800 mb-1">
+                            {product.name}
+                          </h4>
+                          <p className="text-sm text-gray-600 mb-2">
+                            {product.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-bold text-emerald-600">
+                              {product.price}
+                            </span>
+                            <div className="flex items-center space-x-1">
+                              <Leaf className="h-4 w-4 text-green-500" />
+                              <span className="text-xs text-green-600">
+                                Eco-friendly
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
 
