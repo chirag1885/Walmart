@@ -22,14 +22,14 @@ import NotificationPanel from "../components/NotificationPanel";
  const products = [
     {
       id: 1,
-      name: "Organic Apples",
+      name: "Apples",
       description: "Fresh, locally sourced",
       price: "$4.99",
       image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=400&fit=crop&crop=center"
     },
     {
       id: 2,
-      name: "Organic Carrots",
+      name: "Carrots",
       description: "Fresh, locally sourced",
       price: "$3.49",
       image: "https://images.unsplash.com/photo-1445282768818-728615cc910a?w=400&h=400&fit=crop&crop=center"
@@ -43,7 +43,7 @@ import NotificationPanel from "../components/NotificationPanel";
     },
     {
       id: 4,
-      name: "Organic Grapes",
+      name: "Grapes",
       description: "Fresh, locally sourced",
       price: "$6.99",
       image: "https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=400&h=400&fit=crop&crop=center"
