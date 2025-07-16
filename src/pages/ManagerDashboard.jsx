@@ -236,10 +236,10 @@ const ManagerDashboard = () => {
   ]);
 
   const recentOrders = [
-    { id: '#1001', customer: 'Sarah Johnson', amount: '$89.50', status: 'Completed', time: '2 min ago' },
-    { id: '#1002', customer: 'Mike Chen', amount: '$156.20', status: 'Processing', time: '5 min ago' },
-    { id: '#1003', customer: 'Emma Davis', amount: '$73.80', status: 'Completed', time: '8 min ago' },
-    { id: '#1004', customer: 'John Smith', amount: '$234.60', status: 'Pending', time: '12 min ago' },
+    { id: '#1001', customer: 'Sarah Johnson', amount: 'Rs.89.50', status: 'Completed', time: '2 min ago' },
+    { id: '#1002', customer: 'Mike Chen', amount: 'Rs.156.20', status: 'Processing', time: '5 min ago' },
+    { id: '#1003', customer: 'Emma Davis', amount: 'Rs.73.80', status: 'Completed', time: '8 min ago' },
+    { id: '#1004', customer: 'John Smith', amount: 'Rs.234.60', status: 'Pending', time: '12 min ago' },
   ];
 
   const lowStockItems = [
@@ -301,7 +301,7 @@ const ManagerDashboard = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${i < rating ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}
+        className={`h-4 w-4 Rs.{i < rating ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}
       />
     ));
   };
