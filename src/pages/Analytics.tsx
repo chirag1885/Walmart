@@ -79,7 +79,7 @@ const Analytics = () => {
               </div>
               <span className="text-sm font-medium text-green-600">+12.5%</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">$125,486</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-1">Rs.125,486</h3>
             <p className="text-gray-600">Total Revenue</p>
           </div>
 
@@ -112,7 +112,7 @@ const Analytics = () => {
               </div>
               <span className="text-sm font-medium text-green-600">+5.7%</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-1">${customerMetrics.averageOrderValue}</h3>
+            <h3 className="text-2xl font-bold text-gray-800 mb-1">Rs.{customerMetrics.averageOrderValue}</h3>
             <p className="text-gray-600">Avg Order Value</p>
           </div>
         </div>
@@ -144,10 +144,10 @@ const Analytics = () => {
                       <div className="flex-1 bg-gray-200 rounded-full h-6 relative overflow-hidden">
                         <div
                           className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-500"
-                          style={{ width: `${(data.sales / maxSales) * 100}%` }}
+                          style={{ width: `Rs.{(data.sales / maxSales) * 100}%` }}
                         ></div>
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-xs font-medium text-white">${data.sales.toLocaleString()}</span>
+                          <span className="text-xs font-medium text-white">Rs.{data.sales.toLocaleString()}</span>
                         </div>
                       </div>
                       <div className="w-16 text-sm text-gray-600">{data.orders} orders</div>
@@ -170,8 +170,8 @@ const Analytics = () => {
                       <p className="text-sm text-gray-600">{product.sales} units sold</p>
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-gray-800">${product.revenue.toFixed(2)}</div>
-                      <div className={`text-xs ${
+                      <div className="font-bold text-gray-800">Rs.{product.revenue.toFixed(2)}</div>
+                      <div className={`text-xs Rs.{
                         product.trend === 'up' ? 'text-green-600' :
                         product.trend === 'down' ? 'text-red-600' : 'text-gray-600'
                       }`}>
@@ -209,7 +209,7 @@ const Analytics = () => {
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <div
                       className="bg-gradient-to-r from-blue-500 to-emerald-500 h-3 rounded-full"
-                      style={{ width: `${(customerMetrics.returningCustomers / customerMetrics.totalCustomers) * 100}%` }}
+                      style={{ width: `Rs.{(customerMetrics.returningCustomers / customerMetrics.totalCustomers) * 100}%` }}
                     ></div>
                   </div>
                 </div>

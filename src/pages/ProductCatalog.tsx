@@ -58,7 +58,7 @@ const ProductCatalog = () => {
       price: 6.99,
       category: 'dairy',
       location: 'Aisle 1, Refrigerated',
-      image: 'https://images.pexels.com/photos/1769563/pexels-photo-1769563.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image: 'https://assets.syndigo.cloud/cdn/fa33d5c2-1e61-4715-979a-e6e55a0f6cbc/fileType_jpg;size_600x600/fa33d5c2-1e61-4715-979a-e6e55a0f6cbc',
       carbonFootprint: 'Medium',
       inStock: false,
       description: 'Creamy Greek yogurt with probiotics'
@@ -80,7 +80,7 @@ const ProductCatalog = () => {
       price: 4.49,
       category: 'beverages',
       location: 'Aisle 4, Refrigerated',
-      image: 'https://images.pexels.com/photos/1435738/pexels-photo-1435738.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image: 'https://rita.com.vn/images/uploads/300ml%20Orange%20Juice%20Glass%20bottle.jpg',
       carbonFootprint: 'Medium',
       inStock: true,
       description: 'Fresh squeezed orange juice'

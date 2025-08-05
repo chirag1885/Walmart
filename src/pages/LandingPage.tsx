@@ -17,7 +17,6 @@ import {
   Globe
 } from "lucide-react";
 import AnimatedCounter from "../components/AnimatedCounter";
-import FloatingCart from "../components/FloatingCart";
 
 const LandingPage = () => {
   const navigate = useNavigate();

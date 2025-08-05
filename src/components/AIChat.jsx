@@ -170,7 +170,7 @@ const AIChat = () => {
                   <Bot size={20} />
                 </div>
                 <div>
-                  <h3 className="font-semibold">DMart AI Assistant</h3>
+                  <h3 className="font-semibold">CartIQ</h3>
                   <p className="text-xs opacity-90">Online now</p>
                 </div>
               </div>
